@@ -9,9 +9,11 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
-import axios from 'axios'
 import { useParams } from 'react-router-dom'
 import { Product } from '../../app/models/products'
+import agent from '../../app/api/agent'
+import NotFound from '../../app/errors/NotFound'
+import LoadingComponent from '../../app/layout/LoadingComponents'
 
 const ProductDetails = () => {
   const { id } = useParams<{ id: string }>()
@@ -19,16 +21,15 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:5000/api/products/${id}`)
-      .then(response => setProduct(response.data))
+    agent.Catalog.details(Number(id))
+      .then(response => setProduct(response))
       .catch(error => console.log(error))
       .finally(() => setLoading(false))
   }, [id])
 
-  if (loading) return <Typography variant='h3'>Loading...</Typography>
+  if (loading) return <LoadingComponent message='Loading Product Details...' />
 
-  if (!product) return <Typography variant='h3'>Product not found</Typography>
+  if (!product) return <NotFound />
 
   return (
     <Grid

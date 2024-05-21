@@ -4,8 +4,9 @@ import Typography from '@mui/material/Typography'
 import Toolbar from '@mui/material/Toolbar'
 import ListItem from '@mui/material/ListItem'
 import { Badge, Box, IconButton, List, Switch } from '@mui/material'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { ShoppingCart } from '@mui/icons-material'
+import { useStoreContext } from '../context/StoreContext'
 
 const midLinks = [
   {
@@ -49,6 +50,9 @@ interface IHeaderProps {
   handleModeToggle: () => void
 }
 const Header: FC<IHeaderProps> = ({ handleModeToggle }) => {
+  const { basket } = useStoreContext()
+  const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0)
+
   return (
     <AppBar
       position='static'
@@ -93,13 +97,15 @@ const Header: FC<IHeaderProps> = ({ handleModeToggle }) => {
           alignItems='center'
         >
           <IconButton
+            component={Link}
+            to='/basket'
             size='large'
             edge='start'
             color='inherit'
             sx={{ mr: 2 }}
           >
             <Badge
-              badgeContent='4'
+              badgeContent={itemCount}
               color='secondary'
             >
               <ShoppingCart />

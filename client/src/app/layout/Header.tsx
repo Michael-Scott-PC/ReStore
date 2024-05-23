@@ -6,7 +6,7 @@ import ListItem from '@mui/material/ListItem'
 import { Badge, Box, IconButton, List, Switch } from '@mui/material'
 import { Link, NavLink } from 'react-router-dom'
 import { ShoppingCart } from '@mui/icons-material'
-import { useStoreContext } from '../context/StoreContext'
+import { useAppSelector } from '../store/configureStore'
 
 const midLinks = [
   {
@@ -50,7 +50,7 @@ interface IHeaderProps {
   handleModeToggle: () => void
 }
 const Header: FC<IHeaderProps> = ({ handleModeToggle }) => {
-  const { basket } = useStoreContext()
+  const { basket } = useAppSelector(state => state.basket)
   const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0)
 
   return (
